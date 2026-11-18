@@ -32,7 +32,7 @@ const SearchBooks = () => {
   return (
     <div className="relative w-full min-w-0">
       {/* Search Input */}
-      <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-secondary border border-primary/20 focus-within:border-primary">
+      <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-secondary border border-primary/10 focus-within:border-primary/50">
         <SearchIcon size={19} className="text-primary shrink-0" />
 
         <input

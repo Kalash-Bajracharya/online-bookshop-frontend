@@ -1,7 +1,7 @@
-import { Search, SquarePen, Trash2, BookOpen } from "lucide-react";
+import { Search, SquarePen, Trash2, BookOpen, Eye, EyeOff } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { APIURL, GetRequest } from "../../../services/http";
+import { APIURL, GetRequest, PutRequest } from "../../../services/http";
 import ApiImage from "../user/ApiImage";
 
 const ManageBooks = () => {
@@ -50,6 +50,20 @@ const ManageBooks = () => {
       item.title?.toLowerCase().includes(search.toLowerCase()) ||
       item.author?.toLowerCase().includes(search.toLowerCase()),
   );
+
+  const handleToggle = async (id) => {
+    try {
+      await PutRequest(`books/toggle/${id}`);
+
+      setBooks((prev) =>
+        prev.map((book) =>
+          book._id === id ? { ...book, isActive: !book.isActive } : book,
+        ),
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="w-5/6 min-h-screen bg-gray-50 p-6 md:p-8">
@@ -167,7 +181,29 @@ const ManageBooks = () => {
                       </span>
                     </td>
 
-                    <td></td>
+                    <td className="px-5 py-3">
+                      <button
+                        type="button"
+                        onClick={() => handleToggle(item._id)}
+                        className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                          item.isActive
+                            ? "text-red-600 bg-red-50 hover:bg-red-100"
+                            : "text-green-600 bg-green-50 hover:bg-green-100"
+                        }`}
+                      >
+                        {item.isActive ? (
+                          <>
+                            <EyeOff size={16} />
+                            Hide
+                          </>
+                        ) : (
+                          <>
+                            <Eye size={16} />
+                            Show
+                          </>
+                        )}
+                      </button>
+                    </td>
 
                     <td className="px-5 py-3">
                       <div className="flex items-center justify-center gap-2">

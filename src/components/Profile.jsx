@@ -1,28 +1,79 @@
 
 import { useState } from "react";
-import { UserRound, Mail, Wallet } from "lucide-react";
+import { UserRound, Mail, Wallet, Phone, MapPin, Save } from "lucide-react";
+import axios from "axios";
+import { APIURL } from "../../services/http";
 
 const Profile = () => {
-  const [user] = useState(() => {
+  const [user, setUser] = useState(() => {
     return JSON.parse(localStorage.getItem("user")) || {};
   });
+
+  const [formData, setFormData] = useState({
+    name: user.name || "",
+    email: user.email || "",
+    phone: user.phone || "",
+    address: user.address || "",
+  });
+
+  const [loading, setLoading] = useState(false);
 
   // Placeholder until we connect the orders API
   const totalSpent = 0;
 
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSave = async () => {
+    try {
+      setLoading(true);
+
+      const token = localStorage.getItem("token");
+
+      const response = await axios.put(
+        `${APIURL}/users/update/${user.id}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const updatedUser = {
+        ...user,
+        ...response.data,
+      };
+
+      setUser(updatedUser);
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+
+      alert("Profile updated successfully!");
+    } catch (error) {
+      console.log(error);
+      alert(
+        error.response?.data?.message || "Unable to update profile"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-stone-50 px-4 py-10">
-      <div className="mx-auto ">
+      <div className="mx-auto max-w-4xl">
 
-        <h1 className="mb-2 text-3xl font-bold text-stone-800 flex justify-end">
+        <h1 className="mb-6 text-3xl font-bold text-stone-800 text-right">
           My Profile
         </h1>
 
-  
-
         {/* Profile Header */}
-        <div className="mb-6  h-20 flex items-center gap-4 rounded-xl bg-white p-6 shadow-sm">
-          <div className="flex h-40 w-40 items-center justify-center rounded-full bg-[#2F3A1d] text-2xl font-bold text-white">
+        <div className="mb-6 flex items-center gap-4 rounded-xl bg-white p-6 shadow-sm">
+          <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-[#2F3A1d] text-3xl font-bold text-white">
             {user.name?.charAt(0).toUpperCase() || "U"}
           </div>
 
@@ -33,35 +84,6 @@ const Profile = () => {
             <p className="text-sm text-stone-500">
               Bookshop Member
             </p>
-          </div>
-        </div>
-
-        {/* Account Details */}
-        <div className="mb-6 rounded-xl bg-white p-6 shadow-sm">
-          <h2 className="mb-5 text-lg font-semibold text-stone-800">
-            Account Information
-          </h2>
-
-          <div className="flex items-center gap-4 border-b border-stone-100 py-4">
-            <UserRound className="text-stone-500" size={22} />
-
-            <div>
-              <p className="text-sm text-stone-500">Full Name</p>
-              <p className="font-medium text-stone-800">
-                {user.name || "Not available"}
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-4 py-4">
-            <Mail className="text-stone-500" size={22} />
-
-            <div>
-              <p className="text-sm text-stone-500">Email Address</p>
-              <p className="break-all font-medium text-stone-800">
-                {user.email || "Not available"}
-              </p>
-            </div>
           </div>
         </div>
 
@@ -82,10 +104,91 @@ const Profile = () => {
               </h2>
             </div>
           </div>
-
-          
         </div>
 
+        {/* Editable Account Details */}
+        <div className="mt-6 rounded-xl bg-white p-6 shadow-sm">
+          <h2 className="mb-5 text-lg font-semibold text-stone-800">
+            Account Information
+          </h2>
+
+          {/* Full Name */}
+          <div className="border-b border-stone-100 py-4">
+            <label className="mb-2 flex items-center gap-3 text-sm text-stone-500">
+              <UserRound size={20} />
+              Full Name
+            </label>
+
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              className="w-full rounded-lg border border-stone-200 bg-stone-50 px-4 py-3 outline-none focus:border-[#2F3A1d]"
+            />
+          </div>
+
+          {/* Email */}
+          <div className="border-b border-stone-100 py-4">
+            <label className="mb-2 flex items-center gap-3 text-sm text-stone-500">
+              <Mail size={20} />
+              Email Address
+            </label>
+
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              className="w-full rounded-lg border border-stone-200 bg-stone-50 px-4 py-3 outline-none focus:border-[#2F3A1d]"
+            />
+          </div>
+
+          {/* Phone */}
+          <div className="border-b border-stone-100 py-4">
+            <label className="mb-2 flex items-center gap-3 text-sm text-stone-500">
+              <Phone size={20} />
+              Phone Number
+            </label>
+
+            <input
+              type="tel"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              className="w-full rounded-lg border border-stone-200 bg-stone-50 px-4 py-3 outline-none focus:border-[#2F3A1d]"
+            />
+          </div>
+
+          {/* Address */}
+          <div className="py-4">
+            <label className="mb-2 flex items-center gap-3 text-sm text-stone-500">
+              <MapPin size={20} />
+              Address
+            </label>
+
+            <input
+              type="text"
+              name="address"
+              value={formData.address}
+              onChange={handleChange}
+              className="w-full rounded-lg border border-stone-200 bg-stone-50 px-4 py-3 outline-none focus:border-[#2F3A1d]"
+            />
+          </div>
+
+          {/* Save Button */}
+          <div className="mt-6 flex justify-end">
+            <button
+              onClick={handleSave}
+              disabled={loading}
+              className="flex items-center gap-2 rounded-lg bg-[#2F3A1d] px-6 py-3 font-semibold text-white transition hover:bg-[#414e2a] disabled:opacity-60"
+            >
+              <Save size={18} />
+              {loading ? "Saving..." : "Save Changes"}
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

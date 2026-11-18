@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -66,15 +65,13 @@ const Cart = () => {
         { quantity },
         {
           headers: { Authorization: `Bearer ${token}` },
-        }
+        },
       );
 
       setItems((prevItems) =>
         prevItems.map((item) =>
-          item.book._id === bookId
-            ? { ...item, quantity }
-            : item
-        )
+          item.book._id === bookId ? { ...item, quantity } : item,
+        ),
       );
     } catch (error) {
       alert(error.response?.data?.message || "Failed to update quantity");
@@ -89,7 +86,7 @@ const Cart = () => {
       });
 
       setItems((prevItems) =>
-        prevItems.filter((item) => item.book._id !== bookId)
+        prevItems.filter((item) => item.book._id !== bookId),
       );
     } catch (error) {
       alert(error.response?.data?.message || "Failed to remove book");
@@ -99,7 +96,7 @@ const Cart = () => {
   // Calculate total
   const total = items.reduce(
     (sum, item) => sum + item.book.price * item.quantity,
-    0
+    0,
   );
 
   // Place order
@@ -132,18 +129,13 @@ const Cart = () => {
     return (
       <div className="min-h-screen bg-stone-50 px-4 py-16">
         <div className="mx-auto max-w-lg rounded-lg bg-white p-8 text-center shadow-sm">
-
           <h1 className="mb-3 text-2xl font-bold text-[#2F3A1D]">
             Order Placed Successfully!
           </h1>
 
-          <p className="mb-4 text-stone-600">
-            Thank you for shopping with us.
-          </p>
+          <p className="mb-4 text-stone-600">Thank you for shopping with us.</p>
 
-          <p className="text-sm text-stone-500">
-            Order ID: {orderSuccess._id}
-          </p>
+          <p className="text-sm text-stone-500">Order ID: {orderSuccess._id}</p>
 
           <p className="mt-3 font-semibold">
             Total: NPR. {orderSuccess.totalAmount.toLocaleString()}
@@ -155,7 +147,6 @@ const Cart = () => {
           >
             Continue Shopping
           </Link>
-
         </div>
       </div>
     );
@@ -164,16 +155,13 @@ const Cart = () => {
   return (
     <div className="min-h-screen bg-stone-50 px-4 py-8 sm:px-8">
       <div className="mx-auto max-w-5xl">
-
         <h1 className="mb-6 text-2xl font-bold text-stone-800">
           My Shopping Cart
         </h1>
 
         {items.length === 0 ? (
           <div className="rounded-lg bg-white p-8 text-center shadow-sm">
-            <p className="mb-4 text-stone-600">
-              Your cart is empty.
-            </p>
+            <p className="mb-4 text-stone-600">Your cart is empty.</p>
 
             <Link
               to="/shop"
@@ -183,20 +171,12 @@ const Cart = () => {
             </Link>
           </div>
         ) : (
-
           <Stepper active={active} color="#2F3A1D">
-
             {/* STEP 1: CART */}
-            <Stepper.Step
-              label="Cart"
-              description="Review your items"
-            >
-
+            <Stepper.Step label="Cart" description="Review your items">
               <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
-
                 {/* Cart items */}
                 <div className="space-y-4 md:col-span-2">
-
                   {items.map((item) => (
                     <div
                       key={item.book._id}
@@ -209,7 +189,6 @@ const Cart = () => {
                       />
 
                       <div className="flex flex-1 flex-col justify-between">
-
                         <div>
                           <h2 className="font-semibold text-stone-800">
                             {item.book.title}
@@ -225,7 +204,6 @@ const Cart = () => {
                         </div>
 
                         <div className="mt-3 flex items-center justify-between">
-
                           <div className="flex items-center gap-3">
                             <button
                               onClick={() =>
@@ -255,26 +233,22 @@ const Cart = () => {
                           >
                             Remove
                           </button>
-
                         </div>
                       </div>
                     </div>
                   ))}
-
                 </div>
 
                 {/* Order summary */}
                 <div className="h-fit rounded-lg bg-white p-5 shadow-sm">
-
-                  <h2 className="mb-4 text-lg font-semibold">
-                    Order Summary
-                  </h2>
+                  <h2 className="mb-4 text-lg font-semibold">Order Summary</h2>
 
                   <div className="flex justify-between text-sm text-stone-600">
                     <span>Books ({items.length})</span>
 
                     <span>
-                      {items.reduce((sum, item) => sum + item.quantity, 0)} items
+                      {items.reduce((sum, item) => sum + item.quantity, 0)}{" "}
+                      items
                     </span>
                   </div>
 
@@ -298,32 +272,23 @@ const Cart = () => {
                   >
                     Continue Shopping
                   </Link>
-
                 </div>
               </div>
-
             </Stepper.Step>
 
             {/* STEP 2: CHECKOUT */}
-            <Stepper.Step
-              label="Checkout"
-              description="Delivery and payment"
-            >
-
+            <Stepper.Step label="Checkout" description="Delivery and payment">
               <form
                 onSubmit={handlePlaceOrder}
                 className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3"
               >
-
                 {/* Delivery details */}
                 <div className="rounded-lg bg-white p-6 shadow-sm md:col-span-2">
-
                   <h2 className="mb-5 text-xl font-semibold">
                     Delivery Details
                   </h2>
 
                   <div className="space-y-4">
-
                     <div>
                       <label className="mb-1 block text-sm font-medium">
                         Full Name
@@ -380,26 +345,6 @@ const Cart = () => {
                         className="w-full rounded-md border p-3 outline-none focus:border-[#2F3A1D]"
                       />
                     </div>
-
-                    <div>
-                      <label className="mb-1 block text-sm font-medium">
-                        City
-                      </label>
-
-                      <input
-                        type="text"
-                        required
-                        value={shippingAddress.city}
-                        onChange={(e) =>
-                          setShippingAddress({
-                            ...shippingAddress,
-                            city: e.target.value,
-                          })
-                        }
-                        className="w-full rounded-md border p-3 outline-none focus:border-[#2F3A1D]"
-                      />
-                    </div>
-
                   </div>
 
                   {/* Payment method */}
@@ -425,7 +370,6 @@ const Cart = () => {
                   </label>
 
                   <div className="mt-6 flex justify-between">
-
                     <button
                       type="button"
                       onClick={() => setActive(0)}
@@ -441,17 +385,12 @@ const Cart = () => {
                     >
                       {placingOrder ? "Placing Order..." : "Place Order"}
                     </button>
-
                   </div>
-
                 </div>
 
                 {/* Checkout summary */}
                 <div className="h-fit rounded-lg bg-white p-5 shadow-sm">
-
-                  <h2 className="mb-4 text-lg font-semibold">
-                    Order Summary
-                  </h2>
+                  <h2 className="mb-4 text-lg font-semibold">Order Summary</h2>
 
                   <div className="flex justify-between text-sm text-stone-600">
                     <span>Total Books</span>
@@ -467,16 +406,11 @@ const Cart = () => {
                     <span>Total Amount</span>
                     <span>NPR. {total.toLocaleString()}</span>
                   </div>
-
                 </div>
-
               </form>
-
             </Stepper.Step>
-
           </Stepper>
         )}
-
       </div>
     </div>
   );

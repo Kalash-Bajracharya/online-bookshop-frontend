@@ -4,13 +4,15 @@ import { ShoppingCart, ShoppingCartIcon, Star } from "lucide-react";
 import ApiImage from "./ApiImage";
 import Filter from "../../components/Filter";
 import { Link } from "react-router-dom";
+import { Notification } from "@mantine/core";
 
 function Shop() {
   const [books, setBooks] = useState([]);
   const [filteredBooks, setFilteredBooks] = useState([]);
+   const [notification, setNotification] = useState(null);
 
   const fetchBooks = async () => {
-    const response = await GetRequest("books/getAll");
+    const response = await GetRequest("books/getActive");
     console.log(response);
     setBooks(response.data);
     setFilteredBooks(response.data);
@@ -23,8 +25,17 @@ function Shop() {
       });
 
       
+    setNotification({
+        color: "green",
+        title: "Success",
+        message: response.data.message,
+      });
     } catch (error) {
-      alert(error.response?.data?.message || "Failed to add book");
+      setNotification({
+        color: "red",
+        title: "Error",
+        message: error.response?.data?.message || "Failed to add book",
+      });
     }
   };
 
@@ -36,6 +47,18 @@ function Shop() {
 
   return (
     <div className="w-full">
+           {notification && (
+        <div className="fixed bottom-5 right-5 z-[50] w-[350px]">
+          <Notification
+            color={notification.color}
+            title={notification.title}
+            onClose={() => setNotification(null)}
+            withCloseButton
+          >
+            {notification.message}
+          </Notification>
+        </div>
+      )}
       <div className="px-2 sm:px-4 lg:px-6 flex flex-col md:flex-row gap-4">
         <div className="w-full md:w-1/4 lg:w-1/5 shrink-0">
           <Filter books={books} setFilteredBooks={setFilteredBooks} />

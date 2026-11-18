@@ -5,13 +5,15 @@ import { Carousel } from "@mantine/carousel";
 import { GetRequest, PostRequest } from "../../../services/http";
 import ApiImage from "./ApiImage";
 import { Link } from "react-router-dom";
+import { Notification } from "@mantine/core";
 
 const Home = () => {
   const [books, setBooks] = useState([]);
+  const [notification, setNotification] = useState(null);
 
   const fetchBooks = async () => {
     try {
-      const response = await GetRequest("books/getAll");
+      const response = await GetRequest("books/getActive");
       console.log("All books:", response.data);
 
       setBooks(Array.isArray(response.data) ? response.data : []);
@@ -33,14 +35,34 @@ const Home = () => {
         bookId: bookId,
       });
 
-      alert(response.data.message);
+      setNotification({
+        color: "green",
+        title: "Success",
+        message: response.data.message,
+      });
     } catch (error) {
-      alert(error.response?.data?.message || "Failed to add book", error);
+      setNotification({
+        color: "red",
+        title: "Error",
+        message: error.response?.data?.message || "Failed to add book",
+      });
     }
   };
 
   return (
     <div className="w-full">
+      {notification && (
+        <div className="fixed bottom-5 right-5 z-[50] w-[350px]">
+          <Notification
+            color={notification.color}
+            title={notification.title}
+            onClose={() => setNotification(null)}
+            withCloseButton
+          >
+            {notification.message}
+          </Notification>
+        </div>
+      )}
       {/* Hero Section */}
       <div
         className="homepage min-h-[450px] md:min-h-[550px] bg-cover bg-center md:bg-right flex items-center"

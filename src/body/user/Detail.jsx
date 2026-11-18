@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { GetRequest, PostRequest } from "../../../services/http";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, ShoppingCartIcon, Star } from "lucide-react";
 import ApiImage from "./ApiImage";
 import "@mantine/carousel/styles.css";
 import { Tabs } from "@mantine/core";
 import { Carousel } from "@mantine/carousel";
+import { Notification } from "@mantine/core";
 
 const Detail = () => {
   const [loading, setLoading] = useState(false);
   const [book, setBook] = useState(null);
   const [books, setBooks] = useState([]);
+  const [notification, setNotification] = useState(null);
   const params = useParams();
 
   const fetchBook = async () => {
@@ -31,7 +33,7 @@ const Detail = () => {
   };
   const fetchBooks = async () => {
     try {
-      const response = await GetRequest("books/getAll");
+      const response = await GetRequest("books/getActive");
       console.log("All books:", response.data);
 
       setBooks(Array.isArray(response.data) ? response.data : []);
@@ -46,15 +48,23 @@ const Detail = () => {
     fetchBooks();
   }, [params._id]);
 
-   const handleAddToCart = async (bookId) => {
+  const handleAddToCart = async (bookId) => {
     try {
       const response = await PostRequest("cart/add", {
         bookId: bookId,
       });
 
-      alert(response.data.message);
+      setNotification({
+        color: "green",
+        title: "Success",
+        message: response.data.message,
+      });
     } catch (error) {
-      alert(error.response?.data?.message || "Failed to add book",error);
+      setNotification({
+        color: "red",
+        title: "Error",
+        message: error.response?.data?.message || "Failed to add book",
+      });
     }
   };
 
@@ -68,6 +78,18 @@ const Detail = () => {
 
   return (
     <div className="w-full max-w-[1600px] mx-auto px-3 sm:px-6 lg:px-10 xl:px-12">
+      {notification && (
+        <div className="fixed bottom-5 right-5 z-[50] w-[350px]">
+          <Notification
+            color={notification.color}
+            title={notification.title}
+            onClose={() => setNotification(null)}
+            withCloseButton
+          >
+            {notification.message}
+          </Notification>
+        </div>
+      )}
       <nav
         aria-label="Breadcrumb"
         className="mb-8 flex items-center gap-2 text-sm text-gray-500"
@@ -163,7 +185,10 @@ const Detail = () => {
               </p>
             </div>
 
-            <button className="w-full sm:w-auto px-6 sm:px-8 py-3 rounded-xl bg-primary text-secondary font-semibold hover:scale-105 transition-all duration-200">
+            <button
+              className="w-full sm:w-auto px-6 sm:px-8 py-3 rounded-xl bg-primary text-secondary font-semibold hover:scale-105 transition-all duration-200"
+              onClick={() => handleAddToCart(book._id)}
+            >
               Add to Cart
             </button>
           </div>
@@ -212,65 +237,65 @@ const Detail = () => {
                   item.author === book.author),
             )
             .map((item) => (
-               <Carousel.Slide key={item._id}>
-                  <Link
-                    to={`/detail/${item._id}`}
-                    className="block h-full min-w-0 overflow-hidden rounded-2xl bg-secondary shadow-sm hover:shadow-lg transition-all duration-300"
-                  >
-                    {/* Image */}
-                    <div className="relative h-44 sm:h-48 bg-gray-100 flex items-center justify-center">
-                      <ApiImage
-                        path={item.image}
-                        className="h-full w-full object-contain p-4"
-                      />
+              <Carousel.Slide key={item._id}>
+                <Link
+                  to={`/detail/${item._id}`}
+                  className="block h-full min-w-0 overflow-hidden rounded-2xl bg-secondary shadow-sm hover:shadow-lg transition-all duration-300"
+                >
+                  {/* Image */}
+                  <div className="relative h-44 sm:h-48 bg-gray-100 flex items-center justify-center">
+                    <ApiImage
+                      path={item.image}
+                      className="h-full w-full object-contain p-4"
+                    />
 
-                      {/* Rating */}
-                      <div className="absolute top-3 right-3 flex items-center gap-1 px-2 py-1 rounded-full bg-white shadow">
-                        <Star size={13} fill="#2F3A1d" color="#2F3A1d" />
-                        <span className="text-xs font-semibold text-primary">
-                          {item.rating}
-                        </span>
+                    {/* Rating */}
+                    <div className="absolute top-3 right-3 flex items-center gap-1 px-2 py-1 rounded-full bg-white shadow">
+                      <Star size={13} fill="#2F3A1d" color="#2F3A1d" />
+                      <span className="text-xs font-semibold text-primary">
+                        {item.rating}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Details */}
+                  <div className="p-3 sm:p-4">
+                    <p className="text-xs font-semibold uppercase tracking-wide text-primary">
+                      {item.category}
+                    </p>
+
+                    <h2 className="mt-2 text-base sm:text-lg font-bold text-primary truncate">
+                      {item.title}
+                    </h2>
+
+                    <p className="mt-1 text-sm text-gray-500 truncate">
+                      {item.author}
+                    </p>
+
+                    {/* Price */}
+                    <div className="mt-4 flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-xs text-gray-400">Price</p>
+                        <p className="text-base sm:text-lg font-bold text-primary">
+                          NPR. {item.price}
+                        </p>
                       </div>
                     </div>
 
-                    {/* Details */}
-                    <div className="p-3 sm:p-4">
-                      <p className="text-xs font-semibold uppercase tracking-wide text-primary">
-                        {item.category}
-                      </p>
-
-                      <h2 className="mt-2 text-base sm:text-lg font-bold text-primary truncate">
-                        {item.title}
-                      </h2>
-
-                      <p className="mt-1 text-sm text-gray-500 truncate">
-                        {item.author}
-                      </p>
-
-                      {/* Price */}
-                      <div className="mt-4 flex items-center justify-between gap-2">
-                        <div>
-                          <p className="text-xs text-gray-400">Price</p>
-                          <p className="text-base sm:text-lg font-bold text-primary">
-                            NPR. {item.price}
-                          </p>
-                        </div>
-                      </div>
-
-                      {/* Buy now */}
-                      <button
-                        className=" rounded-xl w-full p-2 bg-primary text-secondary flex items-center justify-center gap-2 hover:scale-105 transition"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          handleAddToCart(item._id);
-                        }}
-                      >
-                        <ShoppingCartIcon size={19} /> Add to Cart
-                      </button>
-                    </div>
-                  </Link>
-                </Carousel.Slide>
+                    {/* Buy now */}
+                    <button
+                      className=" rounded-xl w-full p-2 bg-primary text-secondary flex items-center justify-center gap-2 hover:scale-105 transition"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleAddToCart(item._id);
+                      }}
+                    >
+                      <ShoppingCartIcon size={19} /> Add to Cart
+                    </button>
+                  </div>
+                </Link>
+              </Carousel.Slide>
             ))}
         </Carousel>
       </div>

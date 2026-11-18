@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { BookOpen, User, Mail, Lock, ArrowRight } from "lucide-react";
+import { BookOpen, User, Mail, Lock, ArrowRight, Phone, MapPin } from "lucide-react";
 import { PostRequest } from "../../services/http";
 
 const Signup = () => {
@@ -13,6 +13,8 @@ const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
   const [error, setError] = useState("");
 
   const handleSignup = async (e) => {
@@ -31,19 +33,19 @@ const Signup = () => {
 
     try {
       setLoading(true);
-console.log("Signup values:", { name, email, password });
+      console.log("Signup values:", { name, email, password });
       const response = await PostRequest("users/create", {
         name,
         email,
         password,
+        phone,
+        address,
       });
 
       alert(response.data.message || "Account created successfully!");
       navigate("/Login");
     } catch (err) {
-      setError(
-        err.response?.data?.message || "Unable to create your account."
-      );
+      setError(err.response?.data?.message || "Unable to create your account.");
     } finally {
       setLoading(false);
     }
@@ -52,7 +54,6 @@ console.log("Signup values:", { name, email, password });
   return (
     <div className="min-h-screen flex items-center justify-center bg-stone-100 p-4 sm:p-8">
       <div className="grid w-full max-w-5xl overflow-hidden rounded-3xl bg-white shadow-2xl min-[450px]:grid-cols-2">
-
         {/* Left: Branding */}
         <div className="relative hidden min-[450px]:flex min-h-[600px] flex-col justify-between overflow-hidden bg-primary p-8 text-white sm:p-12">
           <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full border border-white/10" />
@@ -61,7 +62,6 @@ console.log("Signup values:", { name, email, password });
 
           <div className="relative z-10">
             <div className="mb-12 flex items-center gap-3">
-              
               <span className="text-2xl font-bold tracking-wide">
                 Pages<span className="text-amber-300">.</span>
               </span>
@@ -76,8 +76,8 @@ console.log("Signup values:", { name, email, password });
             </h1>
 
             <p className="mt-6 max-w-sm leading-7 text-white/75">
-              Create your account and discover books, explore new ideas,
-              and find the stories you'll love.
+              Create your account and discover books, explore new ideas, and
+              find the stories you'll love.
             </p>
           </div>
 
@@ -85,9 +85,7 @@ console.log("Signup values:", { name, email, password });
             <p className="text-sm italic text-white/70">
               "Today a reader, tomorrow a leader."
             </p>
-            <p className="mt-2 text-xs text-white/50">
-              — Margaret Fuller
-            </p>
+            <p className="mt-2 text-xs text-white/50">— Margaret Fuller</p>
           </div>
         </div>
 
@@ -115,10 +113,9 @@ console.log("Signup values:", { name, email, password });
           </div>
 
           <form onSubmit={handleSignup} className="space-y-4">
-
             {/* Full name */}
             <div>
-              <label  className="mb-2 block text-sm font-semibold text-stone-700">
+              <label className="mb-2 block text-sm font-semibold text-stone-700">
                 Full name
               </label>
 
@@ -140,7 +137,10 @@ console.log("Signup values:", { name, email, password });
 
             {/* Email */}
             <div>
-              <label htmlFor="email" className="mb-2 block text-sm font-semibold text-stone-700">
+              <label
+                htmlFor="email"
+                className="mb-2 block text-sm font-semibold text-stone-700"
+              >
                 Email address
               </label>
 
@@ -160,9 +160,54 @@ console.log("Signup values:", { name, email, password });
               </div>
             </div>
 
+            {/* Phone Number */}
+<div>
+  <label htmlFor="phone" className="mb-2 block text-sm font-semibold text-stone-700">
+    Phone Number
+  </label>
+
+  <div className="flex items-center gap-3 rounded-xl border border-stone-200 bg-stone-50 px-4 transition focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15">
+    <Phone size={19} className="shrink-0 text-stone-400" />
+
+    <input
+      id="phone"
+      type="tel"
+      placeholder="Enter your phone number"
+      value={phone}
+      onChange={(e) => setPhone(e.target.value)}
+      required
+      className="w-full bg-transparent py-3 text-sm text-stone-800 outline-none placeholder:text-stone-400"
+    />
+  </div>
+</div>
+
+{/* Address */}
+<div>
+  <label htmlFor="address" className="mb-2 block text-sm font-semibold text-stone-700">
+    Address
+  </label>
+
+  <div className="flex items-center gap-3 rounded-xl border border-stone-200 bg-stone-50 px-4 transition focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15">
+    <MapPin size={19} className="shrink-0 text-stone-400" />
+
+    <input
+      id="address"
+      type="text"
+      placeholder="Enter your address"
+      value={address}
+      onChange={(e) => setAddress(e.target.value)}
+      required
+      className="w-full bg-transparent py-3 text-sm text-stone-800 outline-none placeholder:text-stone-400"
+    />
+  </div>
+</div>
+
             {/* Password */}
             <div>
-              <label htmlFor="password" className="mb-2 block text-sm font-semibold text-stone-700">
+              <label
+                htmlFor="password"
+                className="mb-2 block text-sm font-semibold text-stone-700"
+              >
                 Password
               </label>
 
@@ -193,7 +238,10 @@ console.log("Signup values:", { name, email, password });
 
             {/* Confirm password */}
             <div>
-              <label htmlFor="confirmPassword" className="mb-2 block text-sm font-semibold text-stone-700">
+              <label
+                htmlFor="confirmPassword"
+                className="mb-2 block text-sm font-semibold text-stone-700"
+              >
                 Confirm password
               </label>
 
@@ -223,7 +271,10 @@ console.log("Signup values:", { name, email, password });
 
             {/* Error message */}
             {error && (
-              <p role="alert" className="rounded-lg bg-red-50 p-3 text-sm text-red-600">
+              <p
+                role="alert"
+                className="rounded-lg bg-red-50 p-3 text-sm text-red-600"
+              >
                 {error}
               </p>
             )}
@@ -236,7 +287,10 @@ console.log("Signup values:", { name, email, password });
             >
               {loading ? "Creating account..." : "Create account"}
               {!loading && (
-                <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+                <ArrowRight
+                  size={18}
+                  className="transition-transform group-hover:translate-x-1"
+                />
               )}
             </button>
           </form>
@@ -252,7 +306,8 @@ console.log("Signup values:", { name, email, password });
           </p>
 
           <p className="mt-6 text-center text-xs leading-5 text-stone-400">
-            By creating an account, you agree to our Terms of Service and Privacy Policy.
+            By creating an account, you agree to our Terms of Service and
+            Privacy Policy.
           </p>
         </div>
       </div>

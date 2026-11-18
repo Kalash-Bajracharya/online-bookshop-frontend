@@ -1,5 +1,5 @@
-
 import { LogOut } from "lucide-react";
+
 import { useNavigate } from "react-router-dom";
 
 const Logout = ({ setUser }) => {
@@ -9,7 +9,6 @@ const Logout = ({ setUser }) => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
 
-    setUser(null);
     navigate("/home");
   };
 

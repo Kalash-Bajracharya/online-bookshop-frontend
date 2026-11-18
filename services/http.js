@@ -29,8 +29,12 @@ export function PostRequest(url, body) {
 }
 
 
-// export function PostRequest(url, body) {
-//   console.log("Before Axios:", JSON.stringify(body));
+export function PutRequest(url, body = {}) {
+  const token = localStorage.getItem("token");
 
-//   return axios.post(`${APIURL}/${url}`, body);
-// }
+  return axios.put(`${APIURL}/${url}`, body, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
