@@ -12,7 +12,7 @@ import Detail from "./body/user/Detail";
 
 // Authentication
 import Login from "./body/Login";
-import Signup from "./body/signup";
+import Signup from "./body/Signup";
 import Cart from "./components/Cart";
 
 // User pages
