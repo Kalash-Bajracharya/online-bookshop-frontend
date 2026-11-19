@@ -29,7 +29,11 @@ const Login = () => {
           localStorage.setItem("user", JSON.stringify(data.user));
         }
 
-        navigate("/");
+        if (response.data.user.role === "ADMIN") {
+          navigate("/admin/dashboard");
+        } else {
+          navigate("/home");
+        }
       } else {
         alert(data.message || "Login failed");
       }

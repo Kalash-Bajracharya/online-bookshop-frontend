@@ -18,26 +18,37 @@ function Shop() {
     setFilteredBooks(response.data);
   };
 
-  const handleAddToCart = async (bookId) => {
-    try {
-      const response = await PostRequest("cart/add", {
-        bookId: bookId,
-      });
+const handleAddToCart = async (bookId) => {
+  const token = localStorage.getItem("token");
 
-      
+  if (!token) {
     setNotification({
-        color: "green",
-        title: "Success",
-        message: response.data.message,
-      });
-    } catch (error) {
-      setNotification({
-        color: "red",
-        title: "Error",
-        message: error.response?.data?.message || "Failed to add book",
-      });
-    }
-  };
+      color: "red",
+      title: "Login Required",
+      message: "Please login first to add books to your cart.",
+    });
+    return;
+  }
+
+  try {
+    const response = await PostRequest("cart/add", {
+      bookId: bookId,
+    });
+
+    setNotification({
+      color: "green",
+      title: "Success",
+      message: response.data.message,
+    });
+
+  } catch (error) {
+    setNotification({
+      color: "red",
+      title: "Error",
+      message: error.response?.data?.message || "Failed to add book",
+    });
+  }
+};
 
   console.log(books);
 

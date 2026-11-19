@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 const Footer = () => {
   return (
     <footer className="bg-primary text-white mt-2">
-      <div className="px-20 py-5">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-20">
+      <div className="px-5 md:px-10 lg:px-20 py-5">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10 lg:gap-20">
           {/* Logo */}
           <div>
             <h2 className="text-3xl font-bold">Pages</h2>
@@ -28,7 +28,6 @@ const Footer = () => {
               <Link to="/shop" className="hover:text-white transition">
                 Books
               </Link>
-
             </div>
           </div>
 

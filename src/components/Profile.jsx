@@ -1,5 +1,4 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { UserRound, Mail, Wallet, Phone, MapPin, Save } from "lucide-react";
 import axios from "axios";
 import { APIURL } from "../../services/http";
@@ -18,8 +17,35 @@ const Profile = () => {
 
   const [loading, setLoading] = useState(false);
 
-  // Placeholder until we connect the orders API
-  const totalSpent = 0;
+  useEffect(() => {
+  const fetchOrders = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await axios.get(
+        `${APIURL}/orders/my-orders`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const total = response.data
+        .filter((order) => order.paymentStatus === "PAID")
+        .reduce((sum, order) => sum + order.totalAmount, 0);
+
+      setTotalSpent(total);
+
+    } catch (error) {
+      console.log("Error fetching orders:", error);
+    }
+  };
+
+  fetchOrders();
+}, []);
+
+  const [totalSpent, setTotalSpent] = useState(0);
 
   const handleChange = (e) => {
     setFormData({

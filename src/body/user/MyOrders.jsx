@@ -72,7 +72,10 @@ const MyOrders = () => {
         <p>You haven't placed any orders yet.</p>
       ) : (
         orders.map((order) => (
-          <div key={order._id} className="border rounded-xl p-5 mb-5 bg-white">
+          <div
+            key={order._id}
+            className="border-gray-200  rounded-xl p-5 mb-5 bg-secondary"
+          >
             <div className="flex justify-between mb-4">
               <div>
                 <h2 className="font-semibold">Order #{order._id}</h2>
@@ -88,7 +91,35 @@ const MyOrders = () => {
               </div>
             </div>
 
-            <p className="font-semibold">Total: NPR. {order.totalAmount}</p>
+            {/* Ordered Books */}
+            <div className="border-t border-gray-200 pt-4 mt-4">
+              <h3 className="font-semibold mb-3">Books Ordered</h3>
+
+              {order.items?.map((item, index) => (
+                <div
+                  key={index}
+                  className="flex justify-between items-center py-2 border-b border-gray-100"
+                >
+                  <div>
+                    <p className="font-medium">
+                      {item.book?.title || item.title}
+                    </p>
+
+                    <p className="text-sm text-gray-500">
+                      Quantity: {item.quantity}
+                    </p>
+                  </div>
+
+                  <p className="font-medium">
+                    NPR. {item.price * item.quantity}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            <p className="font-semibold mt-4">
+              Total: NPR. {order.totalAmount}
+            </p>
 
             <p className="text-sm text-gray-500">
               Payment: {order.paymentMethod}

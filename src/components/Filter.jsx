@@ -4,7 +4,7 @@ import React, { useState } from "react";
 
 const Filter = ({ books, setFilteredBooks }) => {
   const [author, setAuthor] = useState("");
-  const [category, setCategory] = useState("All");
+  const [category, setCategory] = useState("all");
 
   const prices = books.map((item) => item.price);
 
