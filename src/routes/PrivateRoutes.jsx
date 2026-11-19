@@ -1,30 +1,18 @@
-import { Heading1 } from 'lucide-react'
-import React from 'react'
+import { Navigate } from "react-router-dom";
 
-import { Navigate } from 'react-router-dom'
+const PrivateRoutes = ({ children }) => {
+  const token = localStorage.getItem("token");
+  const user = JSON.parse(localStorage.getItem("user"));
 
-const PrivateRoutes = ({children}) => {
+  if (!token || !user) {
+    return <Navigate to="/login" replace />;
+  }
 
-    const token = localStorage.getItem("token")
-    const user = JSON.parse(localStorage.getItem("user"))
+  if (user.role !== "ADMIN") {
+    return <Navigate to="/home" replace />;
+  }
 
-    
-    console.log(token)
-    if (!token ) {
-        return   <Navigate to = "/login" />
-    }
+  return children;
+};
 
-    if (token && user.role==="ADMIN") {
-    
-  return (
-    <>
-  
-   
-    {children}
-    </>
-  )
-    }
-
-}
-
-export default PrivateRoutes
+export default PrivateRoutes;

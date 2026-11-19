@@ -13,7 +13,6 @@ const Cart = () => {
     name: "",
     phone: "",
     address: "",
-    city: "",
   });
 
   const [paymentMethod, setPaymentMethod] = useState("COD");
@@ -50,8 +49,7 @@ const Cart = () => {
     setShippingAddress({
       name: user.name || "",
       phone: user.phone || "",
-      address: user.address || "",
-      city: user.city || "",
+      address: user.address || ""
     });
   }, []);
 

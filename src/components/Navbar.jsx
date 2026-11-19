@@ -28,7 +28,6 @@ function Navbar() {
     { name: "Home", path: "/home" },
     { name: "Shop", path: "/shop" },
     // { name: "Categories", path: "/categories" },
-   
   ];
 
   return (
@@ -59,16 +58,16 @@ function Navbar() {
         {/* Search + Profile + Mobile Menu */}
         <div className="flex min-w-0 items-center justify-center gap-2 sm:gap-3 lg:gap-5">
           <div>
-            <Link to="/Cart"><ShoppingCartIcon size={21} color="#2F3A1d"/></Link>
+            <Link to="/Cart">
+              <ShoppingCartIcon size={21} color="#2F3A1d" />
+            </Link>
           </div>
           <div className="w-28 min-w-0 sm:w-40 md:w-44 lg:w-56 xl:w-64">
             <SearchBooks />
           </div>
 
           {user ? (
-            
-             <AvatarMenu user={user} setUser={setUser} />
-            
+            <AvatarMenu user={user} setUser={setUser} />
           ) : (
             <Link
               to="/Login"

@@ -187,9 +187,10 @@ const Detail = () => {
 
             <button
               className="w-full sm:w-auto px-6 sm:px-8 py-3 rounded-xl bg-primary text-secondary font-semibold hover:scale-105 transition-all duration-200"
+              disabled={book.stock <= 0}
               onClick={() => handleAddToCart(book._id)}
             >
-              Add to Cart
+               {book.stock <= 0 ? "Out of Stock" : "Add to Cart"}
             </button>
           </div>
         </div>

@@ -208,6 +208,7 @@ const ManageOrders = () => {
                         <option value="CONFIRMED">Confirmed</option>
                         <option value="SHIPPED">Shipped</option>
                         <option value="DELIVERED">Delivered</option>
+                        <option value="CANCELLED" >Cancelled</option>
                       </select>
                     </td>
 

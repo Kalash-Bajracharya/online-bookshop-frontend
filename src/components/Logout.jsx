@@ -1,8 +1,7 @@
 import { LogOut } from "lucide-react";
-
 import { useNavigate } from "react-router-dom";
 
-const Logout = ({ setUser }) => {
+const Logout = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {

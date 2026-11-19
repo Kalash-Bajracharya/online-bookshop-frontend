@@ -30,10 +30,15 @@ import PrivateRoutes from "./routes/PrivateRoutes";
 import UserRoutes from "./routes/UserRoutes";
 import AddBooks from "./body/admin/AddBooks";
 import ManageOrders from "./body/admin/ManageOrders";
+import MyOrders from "./body/user/MyOrders";
+
+
 
 
 
 function App() {
+
+  
   return (
     <div className="bg-stone-50 min-h-screen">
       <Routes>
@@ -42,7 +47,7 @@ function App() {
           path="/"
           element={
             <>
-              <Navbar />
+              <Navbar/>
               <Outlet />
               <Footer />
             </>
@@ -63,13 +68,14 @@ function App() {
           element={
             <UserRoutes>
               <>
-                <Navbar />
+                <Navbar/>
                 <Outlet />
               </>
             </UserRoutes>
           }
         >
           <Route path="Profile" element={<Profile />} />
+          <Route path="MyOrders" element={<MyOrders />} />
         </Route>
 
         {/* ================= ADMIN ROUTES ================= */}
@@ -78,7 +84,7 @@ function App() {
           element={
             <PrivateRoutes>
               <div className="flex">
-              <AdminSidebar  />
+              <AdminSidebar/>
               <Outlet />
               </div>
             </PrivateRoutes>

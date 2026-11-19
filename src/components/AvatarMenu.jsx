@@ -1,5 +1,5 @@
 import { Avatar, Menu } from "@mantine/core";
-import { UserRound, Settings, LogOut } from "lucide-react";
+import { UserRound,  Package } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import Logout from "./Logout";
 
@@ -21,6 +21,14 @@ const AvatarMenu = ({ user, setUser }) => {
         <Menu.Label>{user?.name || "My Account"}</Menu.Label>
 
         <Menu.Item
+          leftSection={<Package size={16} />}
+          component={Link}
+          to="/user/MyOrders"
+        >
+          My Orders
+        </Menu.Item>
+
+        <Menu.Item
           leftSection={<UserRound size={16} />}
           component={Link}
           to="/user/Profile"
@@ -30,7 +38,7 @@ const AvatarMenu = ({ user, setUser }) => {
 
         <Menu.Divider />
 
-        <Logout setUser={setUser} />
+        <Logout  />
       </Menu.Dropdown>
     </Menu>
   );
