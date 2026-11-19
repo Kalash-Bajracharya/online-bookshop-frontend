@@ -38,7 +38,7 @@ const AvatarMenu = ({ user, setUser }) => {
 
         <Menu.Divider />
 
-        <Logout  />
+        <Logout setUser={setUser} />
       </Menu.Dropdown>
     </Menu>
   );

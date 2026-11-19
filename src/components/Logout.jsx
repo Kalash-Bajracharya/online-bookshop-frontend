@@ -1,14 +1,17 @@
+
 import { LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-const Logout = () => {
+const Logout = ({ setUser }) => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
 
-    navigate("/home");
+    setUser?.(null);
+
+    navigate("/home", { replace: true });
   };
 
   return (
