@@ -1,4 +1,3 @@
-
 import { Outlet, Route, Routes, Navigate } from "react-router-dom";
 
 // Public layout
@@ -24,7 +23,6 @@ import Dashboard from "./body/admin/Dashboard";
 import ManageBooks from "./body/admin/ManageBooks";
 import Demo from "./body/Demo";
 
-
 // Route guards
 import PrivateRoutes from "./routes/PrivateRoutes";
 import UserRoutes from "./routes/UserRoutes";
@@ -32,13 +30,7 @@ import AddBooks from "./body/admin/AddBooks";
 import ManageOrders from "./body/admin/ManageOrders";
 import MyOrders from "./body/user/MyOrders";
 
-
-
-
-
 function App() {
-
-  
   return (
     <div className="bg-stone-50 min-h-screen">
       <Routes>
@@ -47,7 +39,7 @@ function App() {
           path="/"
           element={
             <>
-              <Navbar/>
+              <Navbar />
               <Outlet />
               <Footer />
             </>
@@ -68,7 +60,7 @@ function App() {
           element={
             <UserRoutes>
               <>
-                <Navbar/>
+                <Navbar />
                 <Outlet />
               </>
             </UserRoutes>
@@ -83,9 +75,9 @@ function App() {
           path="/admin"
           element={
             <PrivateRoutes>
-              <div className="flex">
-              <AdminSidebar/>
-              <Outlet />
+              <div className="flex flex-col md:flex-row">
+                <AdminSidebar />
+                <Outlet />
               </div>
             </PrivateRoutes>
           }
